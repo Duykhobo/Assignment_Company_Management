@@ -18,7 +18,7 @@ public class CompanyManagement {
     private final EmployeeService employeeService;
 
     public CompanyManagement() {
-        this.employeeService = new EmployeeService();
+        this.employeeService = EmployeeService.getInstance();
     }
 
     public void showEmployeeList() {
@@ -184,7 +184,7 @@ public class CompanyManagement {
         String empID = getNewEmployeeId(RegexConst.REG_TESTER_ID, "ID format must be 'TXXX'!");
         String empName = Inputter.getAString("Enter name: ", "Name is required.", RegexConst.REG_GLOBAL_NAME);
         double baseSal = Inputter.getADouble("Enter base salary: ", "Salary >= 0.", 0, Double.MAX_VALUE);
-        double bonusRate = Inputter.getADouble("Enter bonus rate: ", "Rate >= 0.", 0, Double.MAX_VALUE);
+        double bonusRate = Inputter.getADouble("Enter bonus rate(%): ", "Rate >= 0.", 0, 100);
         String type = Inputter.getAString("Enter type (AM/MT): ", "Must be AM or MT.", RegexConst.REG_TEST_TYPE);
 
         try {
@@ -209,7 +209,7 @@ public class CompanyManagement {
         double baseSalary = Inputter.getADouble("Enter base salary: ", "Salary > 0.", 1, Double.MAX_VALUE);
         List<String> langList = getProgrammingLanguages();
         int exp = Inputter.getAnInteger("Enter years of experience: ", "Exp between 0 and 50.", 0, 50);
-        double bonusRate = Inputter.getADouble("Enter bonus rate: ", "Rate >= 0.", 0, Double.MAX_VALUE);
+        double bonusRate = Inputter.getADouble("Enter bonus rate(%): ", "Rate >= 0.", 0, 100);
 
         try {
             // --- GỌI FACTORY ---

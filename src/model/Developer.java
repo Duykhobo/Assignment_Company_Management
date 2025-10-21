@@ -58,13 +58,7 @@ public class Developer extends Employee {
     public String toString() {
         String langs = String.join(",", programmingLanguages);
 
-        return String.format(Locale.US, "%s_%s_%.0f_%s_%s_%d",
-                getEmpID(),
-                getEmpName(),
-                getBaseSalary(),
-                teamName,
-                langs,
-                yearsOfExperience);
+        return super.toString() + "_" + langs + "_" + this.teamName + "_" + this.yearsOfExperience;
     }
 
     public void updateDetails(String newName, double newBaseSal, String newTeamName, List<String> newLanguages,

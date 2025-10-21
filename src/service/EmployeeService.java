@@ -12,7 +12,7 @@ import repo.FileHandler;
 import utilities.EmployeeFactory;
 
 public class EmployeeService {
-
+    private static EmployeeService instance = null;
     private static final String DATA_FILE = "employees.txt";
     private final ArrayList<Employee> employeeList;
 
@@ -23,7 +23,7 @@ public class EmployeeService {
         }
     };
 
-    public EmployeeService() {
+    private EmployeeService() {
         this.employeeList = new ArrayList<>();
         this.loadFromFile(DATA_FILE);
     }
@@ -166,5 +166,17 @@ public class EmployeeService {
             return true;
         }
         return false;
+    }
+
+    public static EmployeeService getInstance() {
+        if (instance == null) {
+            synchronized (EmployeeService.class) {
+
+                if (instance == null) {
+                    instance = new EmployeeService();
+                }
+            }
+        }
+        return instance;
     }
 }

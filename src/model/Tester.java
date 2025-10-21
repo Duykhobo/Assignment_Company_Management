@@ -32,17 +32,12 @@ public class Tester extends Employee {
 
     @Override
     public double getSalary() {
-        return getBaseSalary() + (bonusRate * getBaseSalary());
+        return getBaseSalary() + (bonusRate / 100.0 * getBaseSalary());
     }
 
     @Override
     public String toString() {
-        return String.format(Locale.US, "%s_%s_%.0f_%.2f_%s",
-                getEmpID(),
-                getEmpName(),
-                getBaseSalary(),
-                bonusRate,
-                type);
+        return super.toString() + "_" + this.bonusRate + "_" + this.type;
     }
 
     public void updateDetails(String newName, double newBaseSal, double newBonusRate, String newType) {

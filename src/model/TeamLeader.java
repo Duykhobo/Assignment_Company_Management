@@ -25,13 +25,12 @@ public class TeamLeader extends Developer {
     @Override
     public double getSalary() {
         double developerSalary = super.getSalary();
-        return developerSalary + (developerSalary * bonusRate);
+        return developerSalary + (developerSalary * (bonusRate / 100.0));
     }
 
     @Override
     public String toString() {
-        String developerString = super.toString();
-        return String.format(Locale.US, "%s_%.2f", developerString, bonusRate);
+        return super.toString() + "_" + this.bonusRate;
     }
 
     public void updateDetails(String newName, double newBaseSal, String newTeamName, List<String> newLanguages,
