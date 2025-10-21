@@ -60,14 +60,14 @@ public class EmployeeService {
 
     public List<Employee> sortEmployees() {
         List<Employee> list = new ArrayList<>(employeeList);
-        Comparator orderBySalaryAndNameDesc = new Comparator<Employee>() {
+        Comparator<Employee> orderBySalaryAndNameDesc = new Comparator<Employee>() {
             @Override
             public int compare(Employee emp1, Employee emp2) {
-                if (emp2.getSalary() == emp1.getSalary()) {
+                int salaryDiff = Double.compare(emp2.getSalary(), emp1.getSalary());
+                if (salaryDiff == 0) {
                     return emp2.getEmpName().compareTo(emp1.getEmpName());
                 }
-                return Double.compare(emp2.getSalary(), emp1.getSalary());
-
+                return salaryDiff;
             }
         };
         Collections.sort(list, orderBySalaryAndNameDesc);
