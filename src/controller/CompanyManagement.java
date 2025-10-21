@@ -11,6 +11,7 @@ import ui.Menu;
 import utilities.Inputter;
 import utilities.RegexConst;
 import utilities.Validator;
+import utilities.EmployeeFactory;
 
 public class CompanyManagement {
 
@@ -57,12 +58,9 @@ public class CompanyManagement {
         } while (choice != 4);
     }
 
-    // TRONG CLASS CompanyManagement
-
     public void updateEmployee() {
         String empID = Inputter.getAString("Enter the ID of the employee to update: ", "ID cannot be empty.");
-        Employee emp = employeeService.findEmployeeById(empID); // Vẫn tìm để lấy thông tin hiện tại
-
+        Employee emp = employeeService.findEmployeeById(empID);
         if (emp == null) {
             System.out.println("FAIL: Employee with ID '" + empID + "' does not exist.");
             return;
@@ -81,7 +79,7 @@ public class CompanyManagement {
         // --- Dùng instanceof để XÁC ĐỊNH loại input cần hỏi VÀ gọi service tương ứng
         // ---
         if (emp instanceof TeamLeader) {
-            TeamLeader tl = (TeamLeader) emp; // Chỉ ép kiểu để lấy giá trị hiện tại cho Validator
+            TeamLeader tl = (TeamLeader) emp;
             String newTeamName = Validator.getValidatedStringInput("Enter new team name", tl.getTeamName());
             List<String> newLanguages = Validator.getValidatedLanguagesInput();
             int newExpYear = Validator.getValidatedIntInput("Enter new years of experience", tl.getYearsOfExperience(),
@@ -170,9 +168,15 @@ public class CompanyManagement {
         List<String> langList = getProgrammingLanguages();
         int exp = Inputter.getAnInteger("Enter years of experience: ", "Exp between 0 and 50.", 0, 50);
 
-        Employee dev = new Developer(empID, empName, baseSalary, langList, teamName, exp);
-        employeeService.addEmployee(dev);
-        System.out.println("==> Developer added successfully!");
+        try {
+            // --- GỌI FACTORY ---
+            Employee dev = EmployeeFactory.createDeveloper(empID, empName, baseSalary, langList, teamName, exp); //
+            employeeService.addEmployee(dev);
+            System.out.println("==> Developer added successfully!");
+        } catch (IllegalArgumentException e) {
+            // Bắt lỗi nếu Factory (hoặc constructor ngầm) báo dữ liệu không hợp lệ
+            System.out.println("Error adding developer: " + e.getMessage());
+        }
     }
 
     private void addTester() {
@@ -183,9 +187,14 @@ public class CompanyManagement {
         double bonusRate = Inputter.getADouble("Enter bonus rate: ", "Rate >= 0.", 0, Double.MAX_VALUE);
         String type = Inputter.getAString("Enter type (AM/MT): ", "Must be AM or MT.", RegexConst.REG_TEST_TYPE);
 
-        Employee tester = new Tester(empID, empName, baseSal, bonusRate, type);
-        employeeService.addEmployee(tester);
-        System.out.println("==> Tester added successfully!");
+        try {
+            // --- GỌI FACTORY ---
+            Employee tester = EmployeeFactory.createTester(empID, empName, baseSal, bonusRate, type); //
+            employeeService.addEmployee(tester);
+            System.out.println("==> Tester added successfully!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error adding tester: " + e.getMessage());
+        }
     }
 
     private void addTeamLeader() {
@@ -202,9 +211,15 @@ public class CompanyManagement {
         int exp = Inputter.getAnInteger("Enter years of experience: ", "Exp between 0 and 50.", 0, 50);
         double bonusRate = Inputter.getADouble("Enter bonus rate: ", "Rate >= 0.", 0, Double.MAX_VALUE);
 
-        Employee tl = new TeamLeader(empID, empName, baseSalary, langList, teamName, exp, bonusRate);
-        employeeService.addEmployee(tl);
-        System.out.println("==> Team Leader added successfully!");
+        try {
+            // --- GỌI FACTORY ---
+            Employee tl = EmployeeFactory.createTeamLeader(empID, empName, baseSalary, langList, teamName, exp,
+                    bonusRate); //
+            employeeService.addEmployee(tl);
+            System.out.println("==> Team Leader added successfully!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error adding team leader: " + e.getMessage());
+        }
     }
 
     private void searchByName() {

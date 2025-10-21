@@ -1,7 +1,6 @@
 package service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -10,7 +9,7 @@ import model.Employee;
 import model.TeamLeader;
 import model.Tester;
 import repo.FileHandler;
-import utilities.RegexConst;
+import utilities.EmployeeFactory;
 
 public class EmployeeService {
 
@@ -20,34 +19,7 @@ public class EmployeeService {
     private final FileHandler<Employee> fileHandler = new FileHandler<Employee>() {
         @Override
         public Employee handleLine(String line) {
-            String[] parts = line.split("_");
-            try {
-                String empID = parts[0];
-                String empName = parts[1];
-                double baseSal = Double.parseDouble(parts[2]);
-
-                if (empID.matches(RegexConst.REG_TL_ID)) {
-                    String teamName = parts[3];
-                    List<String> languages = Arrays.asList(parts[4].split(","));
-                    int yearsOfExp = Integer.parseInt(parts[5]);
-                    double bonusRate = Double.parseDouble(parts[6]);
-                    return new TeamLeader(empID, empName, baseSal, languages, teamName, yearsOfExp, bonusRate);
-
-                } else if (empID.matches(RegexConst.REG_DEV_ID)) {
-                    String teamName = parts[3];
-                    List<String> languages = Arrays.asList(parts[4].split(","));
-                    int yearsOfExp = Integer.parseInt(parts[5]);
-                    return new Developer(empID, empName, baseSal, languages, teamName, yearsOfExp);
-
-                } else if (empID.matches(RegexConst.REG_TESTER_ID)) {
-                    double bonusRate = Double.parseDouble(parts[3]);
-                    String testingType = parts[4];
-                    return new Tester(empID, empName, baseSal, bonusRate, testingType);
-                }
-            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                System.err.println("Error parsing line, invalid format: " + line);
-            }
-            return null;
+            return EmployeeFactory.createEmployeeFromFile(line);
         }
     };
 
@@ -181,7 +153,7 @@ public class EmployeeService {
             dev.updateDetails(newName, newBaseSal, newTeamName, newLanguages, newExpYear);
             return true;
         }
-        
+
         return false;
     }
 
