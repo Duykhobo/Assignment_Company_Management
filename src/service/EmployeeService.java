@@ -162,4 +162,37 @@ public class EmployeeService {
         return false;
     }
 
+    public boolean updateTester(String empID, String newName, double newBaseSal, double newBonusRate, String newType) {
+        Employee emp = findEmployeeById(empID);
+        if (emp instanceof Tester) {
+            Tester t = (Tester) emp;
+            t.updateDetails(newName, newBaseSal, newBonusRate, newType);
+            return true;
+
+        }
+        return false;
+    }
+
+    public boolean updateDeveloper(String empID, String newName, double newBaseSal, String newTeamName,
+            List<String> newLanguages, int newExpYear) {
+        Employee emp = findEmployeeById(empID);
+        if (emp instanceof Developer) {
+            Developer dev = (Developer) emp;
+            dev.updateDetails(newName, newBaseSal, newTeamName, newLanguages, newExpYear);
+            return true;
+        }
+        
+        return false;
+    }
+
+    public boolean updateTeamLeader(String empID, String newName, double newBaseSal, String newTeamName,
+            List<String> newLanguages, int newExpYear, double newBonusRate) {
+        Employee emp = findEmployeeById(empID);
+        if (emp instanceof TeamLeader) {
+            TeamLeader tl = (TeamLeader) emp;
+            tl.updateDetails(newName, newBaseSal, newTeamName, newLanguages, newExpYear, newBonusRate);
+            return true;
+        }
+        return false;
+    }
 }

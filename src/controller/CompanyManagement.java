@@ -57,9 +57,11 @@ public class CompanyManagement {
         } while (choice != 4);
     }
 
+    // TRONG CLASS CompanyManagement
+
     public void updateEmployee() {
         String empID = Inputter.getAString("Enter the ID of the employee to update: ", "ID cannot be empty.");
-        Employee emp = employeeService.findEmployeeById(empID);
+        Employee emp = employeeService.findEmployeeById(empID); // Vẫn tìm để lấy thông tin hiện tại
 
         if (emp == null) {
             System.out.println("FAIL: Employee with ID '" + empID + "' does not exist.");
@@ -71,27 +73,36 @@ public class CompanyManagement {
 
         // --- Thu thập thông tin chung ---
         String newName = Validator.getValidatedStringInput("Enter new name", emp.getEmpName());
-        double newBaseSal = Validator.getValidatedDoubleInput("Enter new base salary", emp.getBaseSalary(), 0, Double.MAX_VALUE);
+        double newBaseSal = Validator.getValidatedDoubleInput("Enter new base salary", emp.getBaseSalary(), 0,
+                Double.MAX_VALUE);
 
-        // --- Dùng instanceof để xử lý các trường hợp riêng ---
+        boolean updateSuccess = false;
+
+        // --- Dùng instanceof để XÁC ĐỊNH loại input cần hỏi VÀ gọi service tương ứng
+        // ---
         if (emp instanceof TeamLeader) {
-            TeamLeader tl = (TeamLeader) emp;
+            TeamLeader tl = (TeamLeader) emp; // Chỉ ép kiểu để lấy giá trị hiện tại cho Validator
             String newTeamName = Validator.getValidatedStringInput("Enter new team name", tl.getTeamName());
             List<String> newLanguages = Validator.getValidatedLanguagesInput();
-            int newExpYear = Validator.getValidatedIntInput("Enter new years of experience", tl.getYearsOfExperience(), 0, 50);
-            double newBonusRate = Validator.getValidatedDoubleInput("Enter new bonus rate", tl.getBonusRate(), 0, Double.MAX_VALUE);
+            int newExpYear = Validator.getValidatedIntInput("Enter new years of experience", tl.getYearsOfExperience(),
+                    0, 50);
+            double newBonusRate = Validator.getValidatedDoubleInput("Enter new bonus rate", tl.getBonusRate(), 0,
+                    Double.MAX_VALUE);
 
-            // Gọi hàm update của đối tượng TeamLeader
-            tl.updateDetails(newName, newBaseSal, newTeamName, newLanguages, newExpYear, newBonusRate);
+            // GỌI SERVICE ĐỂ UPDATE
+            updateSuccess = employeeService.updateTeamLeader(empID, newName, newBaseSal, newTeamName, newLanguages,
+                    newExpYear, newBonusRate);
 
         } else if (emp instanceof Developer) {
             Developer dev = (Developer) emp;
             String newTeamName = Validator.getValidatedStringInput("Enter new team name", dev.getTeamName());
             List<String> newLanguages = Validator.getValidatedLanguagesInput();
-            int newExpYear = Validator.getValidatedIntInput("Enter new years of experience", dev.getYearsOfExperience(), 0, 50);
+            int newExpYear = Validator.getValidatedIntInput("Enter new years of experience", dev.getYearsOfExperience(),
+                    0, 50);
 
-            // Gọi hàm update của đối tượng Developer
-            dev.updateDetails(newName, newBaseSal, newTeamName, newLanguages, newExpYear);
+            // GỌI SERVICE ĐỂ UPDATE
+            updateSuccess = employeeService.updateDeveloper(empID, newName, newBaseSal, newTeamName, newLanguages,
+                    newExpYear);
 
         } else if (emp instanceof Tester) {
             Tester t = (Tester) emp;
@@ -99,11 +110,19 @@ public class CompanyManagement {
                     Double.MAX_VALUE);
             String newType = Validator.getValidatedTesterTypeInput(t.getType());
 
-            // Gọi hàm update của đối tượng Tester
-            t.updateDetails(newName, newBaseSal, newBonusRate, newType);
+            // GỌI SERVICE ĐỂ UPDATE
+            updateSuccess = employeeService.updateTester(empID, newName, newBaseSal, newBonusRate, newType);
+        } else {
+            System.out.println("WARN: Unknown employee type for ID " + empID); // Trường hợp phòng hờ
         }
 
-        System.out.println("==> SUCCESS: Employee information updated.");
+        // --- Thông báo kết quả dựa trên giá trị trả về từ service ---
+        if (updateSuccess) {
+            System.out.println("==> SUCCESS: Employee information updated.");
+        } else {
+            // Service đã in log lỗi chi tiết hơn (nếu có)
+            System.out.println("==> FAIL: Could not update employee. Please check logs or input.");
+        }
     }
 
     public void searchEmployee() {
