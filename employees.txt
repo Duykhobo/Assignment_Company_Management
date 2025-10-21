@@ -1,0 +1,7 @@
+D003_Grace_9000000_Alpha_Go,Rust_10
+TL002_Dave_11000000_Beta_C#,Python_6_0.40
+D001_Alice_8000000_Alpha_Java,Python_5
+T003_Heidi_8500000_0.25_AM
+T001_Eve_7000000_0.20_AM
+D002_Bob_7500000_Beta_C#,JavaScript_3
+TL001_Carol_12000000_Alpha_Java,Python,JavaScript_8_0.50
