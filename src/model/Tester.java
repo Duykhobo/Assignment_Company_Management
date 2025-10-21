@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Locale;
-
 public class Tester extends Employee {
 
     private double bonusRate;

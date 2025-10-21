@@ -1,7 +1,6 @@
 package model;
 
 import java.util.List;
-import java.util.Locale;
 
 public class Developer extends Employee {
 
