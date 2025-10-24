@@ -35,19 +35,18 @@ public class EmployeeFactory {
                     System.err.println("Error parsing TeamLeader, too few parts: " + line);
                     return null;
                 }
-                String teamName = parts[3].trim();
+
                 // Tách ngôn ngữ, xử lý cả trường hợp không có ngôn ngữ nào (chuỗi rỗng sau
                 // split)
-                List<String> languages = Arrays.asList(parts[4].split(","));
-                // Cần làm sạch từng ngôn ngữ và loại bỏ chuỗi rỗng nếu có
-                List<String> cleanLanguages = new ArrayList<>(); // Dùng ArrayList để có thể add
+                List<String> languages = Arrays.asList(parts[3].substring(1, parts[3].length() - 1).split(","));
+                List<String> cleanLanguages = new ArrayList<>();
                 for (String lang : languages) {
                     String trimmedLang = lang.trim();
                     if (!trimmedLang.isEmpty()) {
                         cleanLanguages.add(trimmedLang);
                     }
                 }
-
+                String teamName = parts[4].trim();
                 int yearsOfExp = Integer.parseInt(parts[5].trim());
                 double bonusRate = Double.parseDouble(parts[6].trim());
                 // Kiểm tra giá trị hợp lệ trước khi tạo object (tùy chọn nhưng nên có)
@@ -63,8 +62,8 @@ public class EmployeeFactory {
                     System.err.println("Error parsing Developer, too few parts: " + line);
                     return null;
                 }
-                String teamName = parts[3].trim();
-                List<String> languages = Arrays.asList(parts[4].split(","));
+
+                List<String> languages = Arrays.asList(parts[3].substring(1, parts[3].length() - 1).split(","));
                 List<String> cleanLanguages = new ArrayList<>(); // Dùng ArrayList
                 for (String lang : languages) {
                     String trimmedLang = lang.trim();
@@ -72,6 +71,7 @@ public class EmployeeFactory {
                         cleanLanguages.add(trimmedLang);
                     }
                 }
+                String teamName = parts[4].trim();
                 int yearsOfExp = Integer.parseInt(parts[5].trim());
                 if (baseSal <= 0 || yearsOfExp < 0) {
                     System.err.println("Error parsing Developer, invalid numeric values: " + line);

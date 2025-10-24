@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public abstract class FileHandler<T> {
 
     /**
+     * Hàm chuỗi 1 chuỗi string thành object
      *
      * @param Tlist
      * @param url
@@ -36,7 +37,7 @@ public abstract class FileHandler<T> {
     }
 
     /**
-     * C?n d?nh nghia hàm x? lý dòng
+     * Cần định nghĩa hàm xử lý dòng
      *
      * @param line
      * @return
@@ -44,7 +45,7 @@ public abstract class FileHandler<T> {
     public abstract T handleLine(String line);
 
     /**
-     * Hàm chuy?n object thành string d? luu
+     * Hàm chuyển object thành string để lưu
      *
      * @param TList
      * @param url
